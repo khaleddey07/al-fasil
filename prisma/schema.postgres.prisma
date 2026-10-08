@@ -1,0 +1,176 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+// تاجر - مستخدم المنصة
+model User {
+  id           String   @id @default(cuid())
+  email        String   @unique
+  name         String
+  passwordHash String
+  createdAt    DateTime @default(now())
+  updatedAt    DateTime @updatedAt
+  store        Store?
+  sessions     Session[]
+}
+
+// جلسة مصادقة آمنة
+model Session {
+  id        String   @id @default(cuid())
+  token     String   @unique
+  userId    String
+  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  expiresAt DateTime
+  createdAt DateTime @default(now())
+}
+
+// متجر التاجر
+model Store {
+  id               String   @id @default(cuid())
+  userId           String   @unique
+  user             User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  name             String
+  slug             String   @unique
+  logo             String?
+  description      String?
+  phone            String?
+  telegramBotToken String?
+  telegramChatId   String?
+  defaultHomeFee   Float    @default(600)
+  defaultDeskFee   Float    @default(400)
+  luxTheme         String   @default("emerald-gold") // معرّف قالب Lux (انظر src/lib/lux-themes.ts)
+  // عداد الاستعجال والندرة (Urgency & Scarcity)
+  urgencyEnabled   Boolean  @default(false)
+  urgencyMinutes   Int      @default(45) // مدة العد التنازلي بالدقائق
+  urgencyStock     Int      @default(3)  // "بقي X قطع فقط"
+  // واتساب — تأكيد العنوان التلقائي (UltraMsg، تُخزن مفاتيحها مشفرة)
+  whatsappEnabled  Boolean  @default(false)
+  ultramsgInstance String? // AES-256-GCM
+  ultramsgToken    String? // AES-256-GCM
+  // مفتاح Replicate لتوليد إعلانات الفيديو (BYOK، مشفر)
+  replicateToken   String? // AES-256-GCM
+  deliveryFees     String? // JSON: { "16": { "home": 500, "desk": 350 }, ... }
+  createdAt        DateTime @default(now())
+  updatedAt        DateTime @updatedAt
+  products         Product[]
+  orders           Order[]
+  affiliates       Affiliate[]
+  socialAccounts   SocialAccount[]
+  socialPosts      SocialPost[]
+}
+
+// منتج
+model Product {
+  id          String   @id @default(cuid())
+  storeId     String
+  store       Store    @relation(fields: [storeId], references: [id], onDelete: Cascade)
+  name        String
+  description String?
+  price       Float
+  imageUrl    String?
+  options     String? // JSON: [{ "name": "اللون", "choices": ["أحمر", "أزرق"] }]
+  isActive    Boolean  @default(true)
+  stock       Int? // الكمية المتاحة (null = غير محدودة) — يغذي عداد الندرة
+  videoUrl    String? // رابط/بيانات إعلان الفيديو الجاهز (mp4)
+  videoStatus String   @default("none") // none | pending | ready | failed
+  videoScript String? // سسكربت الإعلان المولد بالذكاء الاصطناعي
+  videoJobId  String? // معرّف مهمة التوليد لدى Replicate
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+  orders      Order[]
+  socialPosts SocialPost[]
+}
+
+// طلبية زبون
+model Order {
+  id             String   @id @default(cuid())
+  orderNumber    String   @unique
+  storeId        String
+  store          Store    @relation(fields: [storeId], references: [id], onDelete: Cascade)
+  productId      String
+  product        Product  @relation(fields: [productId], references: [id])
+  productName    String
+  unitPrice      Float
+  quantity       Int      @default(1)
+  selectedOption String?
+  customerName   String
+  customerPhone  String
+  wilayaCode     Int
+  wilayaName     String
+  commune        String?
+  address        String?
+  deliveryType   String   @default("home") // home | desk
+  deliveryFee    Float    @default(0)
+  total          Float
+  status         String   @default("NEW") // NEW | PROCESSING | SHIPPED | DELIVERED | CANCELLED
+  notes          String?
+  // التحقق من الثقة + تأكيد العنوان + العمولة
+  riskLevel      String? // LOW | HIGH — نتيجة فحص القائمة السوداء
+  affiliateId    String?
+  affiliate      Affiliate? @relation(fields: [affiliateId], references: [id])
+  commission     Float    @default(0) // عمولة المسوق على هذه الطلبية
+  confirmToken   String?  @unique // رابط تأكيد العنوان (واتساب)
+  confirmedAt    DateTime?
+  source         String   @default("STOREFRONT") // STOREFRONT | FACEBOOK_LEAD_AD
+  createdAt      DateTime @default(now())
+  updatedAt      DateTime @updatedAt
+}
+
+// زبناء وهميون (طلبيات مرجعة/أرقام وهمية) — قائمة سوداء على مستوى المنصة
+model BlacklistedCustomer {
+  id               String   @id @default(cuid())
+  phone            String   @unique // بصيغة موحدة دولية: 213XXXXXXXXX
+  failedDeliveries Int      @default(1) // عدد الطلبيات المرجعة
+  note             String?
+  createdAt        DateTime @default(now())
+}
+
+// مسوق بالعمولة (Affiliate & Referral Engine)
+model Affiliate {
+  id          String   @id @default(cuid())
+  storeId     String
+  store       Store    @relation(fields: [storeId], references: [id], onDelete: Cascade)
+  name        String
+  phone       String?
+  code        String   @unique // مثال: AMINE10
+  commission  Float    @default(10.0) // نسبة مئوية 10%
+  totalEarned Float    @default(0.0)
+  orders      Order[]
+  createdAt   DateTime @default(now())
+}
+
+// حسابات التواصل الاجتماعي المرتبطة بالمتجر (Social Sync — Zero-Tech UX)
+// المفتاح السري (accessToken) يُخزن مشفرًا AES-256-GCM مثل بقية المفاتيح
+model SocialAccount {
+  id          String   @id @default(cuid())
+  storeId     String
+  store       Store    @relation(fields: [storeId], references: [id], onDelete: Cascade)
+  network     String   // FACEBOOK_PAGE | INSTAGRAM | TIKTOK | TELEGRAM_CHANNEL | WHATSAPP
+  displayName String? // اسم الصفحة/القناة كما يراه التاجر
+  externalId  String? // pageId أو chatId أو رقم الهاتف/المجموعة
+  accessToken String? // AES-256-GCM (توكن الصفحة/المنصة)
+  meta        String? // JSON إضافي (اسم المستخدم، الأفاتار...)
+  createdAt   DateTime @default(now())
+
+  @@unique([storeId, network, externalId])
+}
+
+// سجل المنشورات المنشورة تلقائيًا على الشبكات
+model SocialPost {
+  id         String   @id @default(cuid())
+  storeId    String
+  store      Store    @relation(fields: [storeId], references: [id], onDelete: Cascade)
+  productId  String?
+  product    Product? @relation(fields: [productId], references: [id])
+  network    String
+  externalId String? // معرف المنشور لدى المنصة (إن وُجد)
+  status     String   @default("PUBLISHED") // PUBLISHED | FAILED
+  error      String? // رسالة الخطأ الودية عند الفشل
+  caption    String? // نص المنشور المولد بالذكاء الاصطناعي
+  createdAt  DateTime @default(now())
+}
