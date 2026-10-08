@@ -1,0 +1,503 @@
+@import "tailwindcss";
+@import "tw-animate-css";
+
+@custom-variant dark (&:is(.dark *));
+
+@theme inline {
+  --color-background: var(--background);
+  --color-foreground: var(--foreground);
+  --font-sans: var(--font-plex);
+  --font-display: var(--font-alexandria);
+  --font-mono: var(--font-geist-mono);
+  --color-sidebar-ring: var(--sidebar-ring);
+  --color-sidebar-border: var(--sidebar-border);
+  --color-sidebar-accent-foreground: var(--sidebar-accent-foreground);
+  --color-sidebar-accent: var(--sidebar-accent);
+  --color-sidebar-primary-foreground: var(--sidebar-primary-foreground);
+  --color-sidebar-primary: var(--sidebar-primary);
+  --color-sidebar-foreground: var(--sidebar-foreground);
+  --color-sidebar: var(--sidebar);
+  --color-chart-5: var(--chart-5);
+  --color-chart-4: var(--chart-4);
+  --color-chart-3: var(--chart-3);
+  --color-chart-2: var(--chart-2);
+  --color-chart-1: var(--chart-1);
+  --color-ring: var(--ring);
+  --color-input: var(--input);
+  --color-border: var(--border);
+  --color-destructive: var(--destructive);
+  --color-accent-foreground: var(--accent-foreground);
+  --color-accent: var(--accent);
+  --color-muted-foreground: var(--muted-foreground);
+  --color-muted: var(--muted);
+  --color-secondary-foreground: var(--secondary-foreground);
+  --color-secondary: var(--secondary);
+  --color-primary-foreground: var(--primary-foreground);
+  --color-primary: var(--primary);
+  --color-popover-foreground: var(--popover-foreground);
+  --color-popover: var(--popover);
+  --color-card-foreground: var(--card-foreground);
+  --color-card: var(--card);
+  --color-deep: var(--deep);
+  --color-deeper: var(--deeper);
+  --color-gold: var(--gold);
+  --color-gold-strong: var(--gold-strong);
+  --color-gold-soft: var(--gold-soft);
+  --color-gold-foreground: var(--gold-foreground);
+  --radius-sm: calc(var(--radius) - 4px);
+  --radius-md: calc(var(--radius) - 2px);
+  --radius-lg: var(--radius);
+  --radius-xl: calc(var(--radius) + 4px);
+  --radius-2xl: calc(var(--radius) + 8px);
+}
+
+:root {
+  --radius: 0.875rem;
+  color-scheme: light;
+
+  /* — Neutres chauds (fond ivoire, texte vert-charbon) — */
+  --background: oklch(0.984 0.007 98);
+  --foreground: oklch(0.235 0.028 172);
+  --card: oklch(1 0 0);
+  --card-foreground: oklch(0.235 0.028 172);
+  --popover: oklch(1 0 0);
+  --popover-foreground: oklch(0.235 0.028 172);
+  --muted: oklch(0.962 0.009 102);
+  --muted-foreground: oklch(0.51 0.022 115);
+  --border: oklch(0.912 0.011 105);
+  --input: oklch(0.905 0.012 105);
+
+  /* — Couleur principale : émeraude profond et raffiné — */
+  --primary: oklch(0.435 0.096 167);
+  --primary-foreground: oklch(0.985 0.008 120);
+  --secondary: oklch(0.948 0.022 162);
+  --secondary-foreground: oklch(0.325 0.058 168);
+  --accent: oklch(0.938 0.034 163);
+  --accent-foreground: oklch(0.30 0.06 168);
+  --ring: oklch(0.55 0.098 164);
+  --destructive: oklch(0.577 0.245 27.325);
+
+  /* — Couleurs immersives pour les dégradés — */
+  --deep: oklch(0.34 0.062 169);
+  --deeper: oklch(0.245 0.05 171);
+
+  /* — Accent dynamique : or chaleureux — */
+  --gold: oklch(0.795 0.132 82);
+  --gold-strong: oklch(0.72 0.135 76);
+  --gold-light: oklch(0.88 0.1 95);
+  --gold-soft: oklch(0.935 0.055 90);
+  --gold-foreground: oklch(0.34 0.072 75);
+
+  /* — Diagrammes — */
+  --chart-1: oklch(0.52 0.11 167);
+  --chart-2: oklch(0.75 0.13 82);
+  --chart-3: oklch(0.62 0.1 185);
+  --chart-4: oklch(0.68 0.12 55);
+  --chart-5: oklch(0.45 0.08 172);
+
+  --sidebar: oklch(0.985 0 0);
+  --sidebar-foreground: oklch(0.145 0 0);
+  --sidebar-primary: oklch(0.205 0 0);
+  --sidebar-primary-foreground: oklch(0.985 0 0);
+  --sidebar-accent: oklch(0.97 0 0);
+  --sidebar-accent-foreground: oklch(0.205 0 0);
+  --sidebar-border: oklch(0.922 0 0);
+  --sidebar-ring: oklch(0.708 0 0);
+}
+
+.dark {
+  --background: oklch(0.17 0.02 172);
+  --foreground: oklch(0.97 0.008 110);
+  color-scheme: dark;
+  --card: oklch(0.22 0.025 172);
+  --card-foreground: oklch(0.97 0.008 110);
+  --popover: oklch(0.22 0.025 172);
+  --popover-foreground: oklch(0.97 0.008 110);
+  --primary: oklch(0.72 0.11 164);
+  --primary-foreground: oklch(0.17 0.03 172);
+  --secondary: oklch(0.27 0.03 170);
+  --secondary-foreground: oklch(0.95 0.01 120);
+  --muted: oklch(0.27 0.02 160);
+  --muted-foreground: oklch(0.72 0.02 120);
+  --accent: oklch(0.28 0.035 168);
+  --accent-foreground: oklch(0.95 0.01 120);
+  --destructive: oklch(0.704 0.191 22.216);
+  --border: oklch(1 0 0 / 10%);
+  --input: oklch(1 0 0 / 14%);
+  --ring: oklch(0.62 0.09 164);
+  --deep: oklch(0.30 0.055 170);
+  --deeper: oklch(0.21 0.045 172);
+  --gold: oklch(0.80 0.13 84);
+  --gold-strong: oklch(0.74 0.135 78);
+  --gold-light: oklch(0.87 0.09 96);
+  --gold-soft: oklch(0.32 0.05 85);
+  --gold-foreground: oklch(0.90 0.09 88);
+  --chart-1: oklch(0.62 0.12 165);
+  --chart-2: oklch(0.76 0.13 84);
+  --chart-3: oklch(0.66 0.1 185);
+  --chart-4: oklch(0.7 0.12 55);
+  --chart-5: oklch(0.5 0.08 172);
+  --sidebar: oklch(0.205 0 0);
+  --sidebar-foreground: oklch(0.985 0 0);
+  --sidebar-primary: oklch(0.488 0.243 264.376);
+  --sidebar-primary-foreground: oklch(0.985 0 0);
+  --sidebar-accent: oklch(0.269 0 0);
+  --sidebar-accent-foreground: oklch(0.985 0 0);
+  --sidebar-border: oklch(1 0 0 / 10%);
+  --sidebar-ring: oklch(0.556 0 0);
+}
+
+@layer base {
+  * {
+    @apply border-border outline-ring/50;
+  }
+  body {
+    @apply bg-background text-foreground;
+    font-family: var(--font-plex), "Segoe UI", Tahoma, system-ui, sans-serif;
+    text-rendering: optimizeLegibility;
+  }
+  ::selection {
+    background: rgba(217, 166, 46, 0.38);
+    color: var(--foreground);
+  }
+}
+
+/* ————— Utilitaires premium ————— */
+
+/* Titres : police d'affichage géométrique */
+.font-display {
+  font-family: var(--font-alexandria), var(--font-plex), "Segoe UI", sans-serif;
+}
+
+/* Lignes d'identité des templates Lux */
+.font-amiri {
+  font-family: var(--font-amiri), var(--font-alexandria), "Times New Roman", serif;
+}
+.font-cairo {
+  font-family: var(--font-cairo), var(--font-plex), "Segoe UI", sans-serif;
+}
+
+/* ————— Effet « Luxe & Gold » (spécification Lux Engine) ————— */
+
+/* Texte en dégradé d'or massif */
+.gold-gradient-text {
+  background-image: linear-gradient(135deg, #FFF5C0 0%, #D4AF37 50%, #AA7C11 100%);
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+  -webkit-text-fill-color: transparent;
+}
+
+/* Carte verre premium bordée d'or */
+.luxury-glass-card {
+  background-color: rgba(15, 15, 20, 0.75);
+  backdrop-filter: blur(16px) saturate(1.3);
+  border: 1px solid rgba(212, 175, 55, 0.25);
+  box-shadow: 0 20px 50px rgba(0, 0, 0, 0.5);
+}
+
+/* Bouton doré lumineux avec micro-interaction */
+.gold-glow-button {
+  background: linear-gradient(90deg, #D4AF37 0%, #FFDF00 50%, #D4AF37 100%);
+  color: #050505;
+  font-weight: 800;
+  box-shadow: 0 0 25px rgba(212, 175, 55, 0.4);
+  transition: all 0.3s ease;
+}
+.gold-glow-button:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 0 35px rgba(212, 175, 55, 0.7);
+}
+.gold-glow-button:active {
+  transform: translateY(0) scale(0.98);
+}
+
+/* Fond « Dark Cosmos » de la vitrine principale */
+.cosmos-bg {
+  background:
+    radial-gradient(ellipse 80% 55% at 70% -10%, rgba(212, 175, 55, 0.13), transparent 60%),
+    radial-gradient(ellipse 70% 50% at 15% 110%, rgba(80, 60, 20, 0.18), transparent 65%),
+    linear-gradient(160deg, #0B0B12 0%, #0A0A10 45%, #0E0C16 100%);
+}
+
+/* Étoiles scintillantes décoratives (pseudo-éléments légers) */
+@keyframes twinkle {
+  0%, 100% { opacity: 0.15; transform: scale(0.8); }
+  50% { opacity: 0.9; transform: scale(1.15); }
+}
+.twinkle {
+  animation: twinkle 3s ease-in-out infinite;
+}
+
+/* Entrée 3D du téléphone du playground */
+@keyframes phone-in {
+  from {
+    opacity: 0;
+    transform: perspective(1200px) rotateY(24deg) rotateX(6deg) translateY(18px) scale(0.94);
+  }
+  to {
+    opacity: 1;
+    transform: perspective(1200px) rotateY(0deg) rotateX(0deg) translateY(0) scale(1);
+  }
+}
+.animate-phone-in {
+  animation: phone-in 0.65s cubic-bezier(0.22, 1, 0.36, 1) both;
+}
+
+/* Ondes vocales du playground */
+@keyframes wave-bar {
+  0%, 100% { transform: scaleY(0.35); }
+  50% { transform: scaleY(1); }
+}
+.wave-bar {
+  transform-origin: center;
+  animation: wave-bar 0.9s ease-in-out infinite;
+}
+
+/* Carrousel horizontal à accroche (galerie des 20 templates) */
+.scroll-snap-x {
+  scroll-snap-type: x mandatory;
+  -webkit-overflow-scrolling: touch;
+  scrollbar-width: none;
+}
+.scroll-snap-x::-webkit-scrollbar {
+  display: none;
+}
+.scroll-snap-x > * {
+  scroll-snap-align: center;
+}
+
+/* Effet de verre (glassmorphism) */
+.glass {
+  background-color: rgba(255, 255, 255, 0.72);
+  backdrop-filter: blur(18px) saturate(1.4);
+}
+.glass-strong {
+  background-color: rgba(255, 255, 255, 0.85);
+  backdrop-filter: blur(22px) saturate(1.5);
+}
+.dark .glass {
+  background-color: rgba(20, 31, 26, 0.72);
+}
+.dark .glass-strong {
+  background-color: rgba(20, 31, 26, 0.85);
+}
+
+/* Surélévation douce au survol */
+.lift {
+  transition:
+    transform 0.3s cubic-bezier(0.4, 0, 0.2, 1),
+    box-shadow 0.3s cubic-bezier(0.4, 0, 0.2, 1),
+    border-color 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
+.lift:hover {
+  transform: translateY(-3px);
+}
+
+/* Ombres signature */
+.shadow-soft {
+  box-shadow:
+    0 1px 2px rgba(21, 40, 33, 0.05),
+    0 10px 30px -14px rgba(21, 40, 33, 0.14);
+}
+.shadow-lift {
+  box-shadow:
+    0 2px 6px rgba(21, 40, 33, 0.07),
+    0 22px 44px -18px rgba(21, 40, 33, 0.22);
+}
+
+/* في الوضع الداكن: ظلال أعمق وأكثر عتامة لفصل البطاقات عن الخلفية */
+.dark .shadow-soft {
+  box-shadow:
+    0 1px 2px rgba(0, 0, 0, 0.42),
+    0 10px 30px -14px rgba(0, 0, 0, 0.58);
+}
+.dark .shadow-lift {
+  box-shadow:
+    0 2px 6px rgba(0, 0, 0, 0.48),
+    0 22px 44px -18px rgba(0, 0, 0, 0.68);
+}
+.shadow-glow-gold {
+  box-shadow: 0 10px 30px -10px rgba(217, 166, 46, 0.55);
+}
+
+/* Motifs décoratifs */
+.pattern-dots {
+  background-image: radial-gradient(
+    color-mix(in oklab, white 26%, transparent) 1.2px,
+    transparent 1.2px
+  );
+  background-size: 24px 24px;
+}
+.pattern-grid {
+  background-image:
+    linear-gradient(color-mix(in oklab, white 5%, transparent) 1px, transparent 1px),
+    linear-gradient(90deg, color-mix(in oklab, white 5%, transparent) 1px, transparent 1px);
+  background-size: 44px 44px;
+}
+
+/* Dégradé de texte doré */
+.text-gradient-gold {
+  background-image: linear-gradient(
+    100deg,
+    var(--gold) 10%,
+    var(--gold-light) 50%,
+    var(--gold) 90%
+  );
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+  -webkit-text-fill-color: transparent;
+}
+
+/* Bouton doré */
+.btn-gold {
+  background: linear-gradient(140deg, var(--gold) 0%, var(--gold-strong) 100%);
+  color: var(--gold-foreground);
+  box-shadow: 0 4px 14px -4px rgba(190, 140, 30, 0.55);
+}
+.btn-gold:hover {
+  filter: brightness(1.06);
+  box-shadow: 0 8px 22px -6px rgba(190, 140, 30, 0.65);
+}
+
+/* ————— Animations d'apparition ————— */
+@keyframes fade-up {
+  from {
+    opacity: 0;
+    transform: translateY(16px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+@keyframes fade-in {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+@keyframes scale-in {
+  from {
+    opacity: 0;
+    transform: scale(0.88);
+  }
+  to {
+    opacity: 1;
+    transform: scale(1);
+  }
+}
+@keyframes float-slow {
+  0%,
+  100% {
+    transform: translateY(0) scale(1);
+  }
+  50% {
+    transform: translateY(-20px) scale(1.05);
+  }
+}
+@keyframes spin-slow {
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+.animate-fade-up {
+  animation: fade-up 0.55s cubic-bezier(0.22, 1, 0.36, 1) both;
+}
+.animate-fade-in {
+  animation: fade-in 0.5s ease-out both;
+}
+.animate-scale-in {
+  animation: scale-in 0.4s cubic-bezier(0.22, 1, 0.36, 1) both;
+}
+.float-slow {
+  animation: float-slow 9s ease-in-out infinite;
+}
+.float-slower {
+  animation: float-slow 13s ease-in-out infinite;
+}
+
+/* Décalages d'apparition en cascade */
+.stagger-1 { animation-delay: 0.05s; }
+.stagger-2 { animation-delay: 0.1s; }
+.stagger-3 { animation-delay: 0.16s; }
+.stagger-4 { animation-delay: 0.22s; }
+.stagger-5 { animation-delay: 0.28s; }
+.stagger-6 { animation-delay: 0.34s; }
+.stagger-7 { animation-delay: 0.4s; }
+.stagger-8 { animation-delay: 0.46s; }
+
+/* ————— Divers ————— */
+
+/* Barre de défilement élégante et chaleureuse */
+.custom-scrollbar::-webkit-scrollbar {
+  width: 8px;
+  height: 8px;
+}
+.custom-scrollbar::-webkit-scrollbar-track {
+  background: transparent;
+}
+.custom-scrollbar::-webkit-scrollbar-thumb {
+  background: rgba(20, 77, 61, 0.22);
+  border-radius: 8px;
+}
+.custom-scrollbar::-webkit-scrollbar-thumb:hover {
+  background: rgba(20, 77, 61, 0.42);
+}
+.dark .custom-scrollbar::-webkit-scrollbar-thumb {
+  background: rgba(125, 210, 175, 0.28);
+}
+.dark .custom-scrollbar::-webkit-scrollbar-thumb:hover {
+  background: rgba(125, 210, 175, 0.45);
+}
+
+/* Empêcher les numéros de téléphone de s'afficher en chiffres latins sur iOS */
+a[href^="tel"] {
+  color: inherit;
+}
+
+/* حقل الفخ ضد الروبوتات (honeypot) — مخفي عن البشر وبرامج قراءة الشاشة */
+.hp-field {
+  position: absolute !important;
+  left: -9999px !important;
+  top: auto !important;
+  width: 1px !important;
+  height: 1px !important;
+  overflow: hidden !important;
+  opacity: 0 !important;
+  pointer-events: none !important;
+}
+
+@keyframes pulse-rec {
+  0%,
+  100% {
+    opacity: 1;
+    transform: scale(1);
+  }
+  50% {
+    opacity: 0.75;
+    transform: scale(1.06);
+  }
+}
+.recording-pulse {
+  animation: pulse-rec 1.2s ease-in-out infinite;
+}
+
+/* Anneau pulsant autour du logo (écran de chargement) */
+@keyframes ring-pulse {
+  0% {
+    transform: scale(1);
+    opacity: 0.5;
+  }
+  100% {
+    transform: scale(1.8);
+    opacity: 0;
+  }
+}
+.ring-pulse {
+  animation: ring-pulse 1.6s cubic-bezier(0.22, 1, 0.36, 1) infinite;
+}
